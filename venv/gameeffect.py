@@ -3,8 +3,8 @@ from gameobject import GameObject
 
 class GameEffect(GameObject):
     """ Класс для еффектов (взрывы, всполохи и проч. короткоживущие объекты)"""
-    def __init__(self, group, start_x, start_y, ttl = 250, animation_speed = 60 ):
-        GameObject.__init__(self, group, 0, start_x, start_y, animation_speed)
+    def __init__(self, group, speedx, speedy, start_x, start_y, ttl = 250, animation_speed = 60 ):
+        GameObject.__init__(self, group, speedx, speedy, start_x, start_y, animation_speed)
         self.images = []
         # TTL - time to life, a time after will self remove from groups
         self.ttl = ttl

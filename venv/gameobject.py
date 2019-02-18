@@ -1,12 +1,13 @@
 import pygame
 
 class GameObject(pygame.sprite.Sprite):
-    def __init__(self, group, speed = 0, x = 0, y = 0, animation_speed = 80 ):
+    def __init__(self, group, speedx = 0, speedy = 0, x = 0, y = 0, animation_speed = 80 ):
         pygame.sprite.Sprite.__init__(self)
         """Инициализирует корабль и задает его начальную позицию."""
         self.group = group
         self.image = pygame.Surface((10, 20))
-        self.speed = speed
+        self.speedx = speedx
+        self.speedy = speedy
         self.rect = pygame.Rect(0,0,0,0)
         # Устанавливаем начальные координаты
         self.start_y = y
@@ -17,7 +18,8 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        self.rect.top += self.speed
+        self.rect.top += self.speedy
+        self.rect.centerx += self.speedx
 
     def set_speed(self, speed):
         self.speed = speed

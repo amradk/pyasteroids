@@ -6,8 +6,8 @@ from gameeffect import GameEffect
 
 class Asteroid(GameObject):
     """Анимированные (вращение) астероиды"""
-    def __init__(self, group, eff_group, speed, start_x, start_y, animation_speed = 60 ):
-        GameObject.__init__(self, group, speed, start_x, start_y, animation_speed)
+    def __init__(self, group, eff_group, speedx, speedy, start_x, start_y, animation_speed = 60 ):
+        GameObject.__init__(self, group, speedx, speedy, start_x, start_y, animation_speed)
         self.images = []
         self.animation_step = 0
         self.animation_len = 0
@@ -18,7 +18,7 @@ class Asteroid(GameObject):
         self.hp = 100
         self.damage = 30
         # Взрыв
-        self.explosion = GameEffect(self.effect_group, start_x, self.rect.top);
+        self.explosion = GameEffect(self.effect_group, 0,0, start_x, self.rect.top);
         self.explosion.set_images([
             "assets/objects/explosion/regularExplosion01.png",
             "assets/objects/explosion/regularExplosion02.png",
@@ -53,7 +53,8 @@ class Asteroid(GameObject):
                 self.animation_step = (self.animation_step + 1) % self.animation_len
                 self.elapsed = now
             self.image = self.images[self.animation_step]
-            self.rect.top += self.speed
+            self.rect.top += self.speedy
+            self.rect.centerx += self.speedx
 
     def do_damage(self):
         return self.damage
@@ -83,7 +84,6 @@ class Asteroid(GameObject):
         return self.is_destroyed
 
     def respawn(self):
-        print("Asteroid is respawned")
         self.is_destroyed = False
         # respawn
         self.rect.top = -100

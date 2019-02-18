@@ -4,8 +4,8 @@ from gameobject import GameObject
 from gameeffect import GameEffect
 
 class Player(GameObject):
-    def __init__(self, pl_group, ef_group, screen, settings, speed, start_x, start_y, animation_speed = 60):
-        GameObject.__init__(self, pl_group, speed, start_x, start_y, animation_speed)
+    def __init__(self, pl_group, ef_group, screen, settings, speedx, speedy, start_x, start_y, animation_speed = 60):
+        GameObject.__init__(self, pl_group, speedx, speedy, start_x, start_y, animation_speed)
         """Инициализирует корабль и задает его начальную позицию."""
         # Загрузка изображения корабля и получение прямоугольника.
         self.image_neutral = pygame.image.load(settings.player_ship).convert_alpha()
@@ -27,16 +27,24 @@ class Player(GameObject):
 
         # ДК, для анимации выстрела
         self.last_shot = pygame.time.get_ticks()
-        self.blast = GameEffect(self.group, start_x, self.rect.top);
+        self.blast = GameEffect(self.group, 0, 0, start_x, self.rect.top, 60);
         self.blast.set_images(["assets/objects/shoots/laserGreenShot.png"])
         self.blast.set_y(self.rect.top - self.blast.get_height() + 10)
         # удаляем из груп чтобы избежать отрисовки раньше времени
         self.effect_group.remove(self.blast)
 
         # Щит
-        self.shield = GameEffect(self.effect_group, start_x, self.rect.top, 150)
+        self.shield = GameEffect(self.effect_group, 0, 0, start_x, self.rect.top, 150)
         self.shield.set_images([settings.player_shield])
         self.last_damage = pygame.time.get_ticks()
+
+        # Воccтановления щита, если 5 сек. без повреждений то восстанавливаем
+        # 2 еденицы энергии каждые 5 сек
+        self.last_damage = 0
+        self.shield_last_restore = pygame.time.get_ticks()
+        self.shield_recahrge_period = 10000
+        self.shield_energy_restore = 5
+        self.shield_restore_delay = 1000
 
         # Флаг перемещения
         self.moving_right = False
@@ -55,6 +63,15 @@ class Player(GameObject):
             self.set_image_left()
         # Обновление атрибута rect на основании self.center
         self.rect.centerx = self.center
+        self.shield_restore()
+
+    def shield_restore(self):
+        if self.shield_hp < 100:
+            now = pygame.time.get_ticks()
+            if now - self.last_damage > self.shield_recahrge_period:
+                if now - self.shield_last_restore > self.shield_restore_delay:
+                    self.shield_hp += self.shield_energy_restore
+                    self.shield_last_restore = now
 
     def set_image_neutral(self):
         if self.image != self.image_neutral:
@@ -76,7 +93,7 @@ class Player(GameObject):
         #if now - self.last_shot > self.shoot_delay:
         #    self.group.remove(self.blast)
         #    self.last_shot = now
-        bullet = Bullet(self.group, -5, self.rect.centerx, self.rect.top - 10)
+        bullet = Bullet(self.group, 0, -5, self.rect.centerx, self.rect.top - 10)
 
         return bullet
 
@@ -93,8 +110,8 @@ class Player(GameObject):
             self.shield.set_x(self.rect.centerx)
             self.group.add(self.shield)
             self.shield_hp -= damage
+            self.last_damage = pygame.time.get_ticks()
             if self.shield_hp < 0:
                 self.shield_hp = 0
         else:
             self.hp -= damage
-

@@ -2,13 +2,13 @@ import pygame
 from gameobject import GameObject
 
 class Bullet(GameObject):
-    def __init__(self, screen, speed, start_x, start_y, animation_speed = 60 ):
-        GameObject.__init__(self, screen, speed, start_x, start_y, animation_speed)
+    def __init__(self, screen, speedx, speedy, start_x, start_y, animation_speed = 60 ):
+        GameObject.__init__(self, screen, speedx, speedy, start_x, start_y, animation_speed)
         self.image = pygame.image.load("assets/objects/shoots/laserGreen.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.bottom = start_y
         self.rect.centerx = start_x
-        self.speedy = -10
+        self.speedy = speedy
 
     def update(self):
         self.rect.y += self.speedy
