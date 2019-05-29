@@ -1,6 +1,5 @@
 import pygame
 from pygame import *
-
 from state import State
 import sys
 from settings import Settings
@@ -11,9 +10,12 @@ from asteroid import Asteroid
 from random import randrange
 import resources
 
+
 class GameState(State):
-    def __init__(self, screen):
+
+    def __init__(self, screen, state_manager):
         super(State, self).__init__()
+        self.state_manager = state_manager
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
         self.max_asteroids = 10
@@ -28,6 +30,7 @@ class GameState(State):
         self.asteroid_respawn_time = 5000
         self.asteroid_images = resources.asteroid_images
         self.settings = Settings()
+        self.bg = None
         # define colors
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -44,12 +47,7 @@ class GameState(State):
         self.sp_bullets = pygame.sprite.Group()
         self.sp_backgroud = pygame.sprite.Group()
 
-        self.pl = Player(self.sp_player, self.sp_effects,
-                         self.screen, self.settings, 0, 0, self.screen_rect.centerx, self.screen_rect.bottom)
-        self.sp_player.add(self.pl)
-
-        self.bg = Background(self.screen, self.settings, self.sp_backgroud)
-        self.bg.init_bkg()
+        self.pl = None
         self.asteroids = []
 
     def draw_text(self, text, x, y):
@@ -82,7 +80,7 @@ class GameState(State):
             if asteroid.get_y() >= self.screen.get_height():
                 asteroid.set_y(-100)
                 asteroid.set_x(randrange(0, 639))
-                asteroid.set_speed(randrange(2, 6))
+                asteroid.set_speed_y(randrange(2, 6))
             # Оживляем убитые астероиды
             if asteroid.get_is_destroyed() == True:
                 if (now - asteroid.get_last_death()) > self.respawn_time:
@@ -98,11 +96,33 @@ class GameState(State):
         pygame.draw.rect(self.screen, color, fill_rect)
         pygame.draw.rect(self.screen, self.WHITE, outline_rect, 2)
 
-
     def draw_hud(self):
         self.draw_health_bar()
         self.draw_shield_bar()
         self.draw_text(str(self.scores), self.score_x, self.score_y)
+
+    def init(self):
+        self.screen.fill((0, 0, 255))
+        self.scores = 0
+        #ДК очищаем игры
+        self.sp_player.empty()
+        self.sp_effects.empty()
+        self.sp_asteroids.empty()
+        self.sp_bullets.empty()
+        self.sp_backgroud.empty()
+
+        #ДК очищаем объекты
+        self.pl = None
+        self.bg = None
+        self.asteroids.clear()
+        #Ининциализация
+        self.pl = Player(self.sp_player, self.sp_effects,
+                         self.screen, self.settings, 0, 0, self.screen_rect.centerx, self.screen_rect.bottom)
+        self.sp_player.add(self.pl)
+
+        self.bg = Background(self.screen, self.settings, self.sp_backgroud)
+        self.bg.init_bkg()
+        self.init_asteroids()
 
     def update(self):
         # Update sprites
@@ -153,7 +173,7 @@ class GameState(State):
                     self.pl.moving_right = True
                     self.pl.set_image_righ()
                 elif event.key == pygame.K_ESCAPE:
-                    sys.exit()
+                    self.state_manager.go_to('title', 'resume')
                 elif event.key == pygame.K_LEFT:
                     self.pl.moving_left = True
                     self.pl.set_image_left()

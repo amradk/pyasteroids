@@ -5,6 +5,7 @@ from statemanager import StateMananger
 from titlestate import TitleState
 from settings import Settings
 
+
 def run_game():
     pygame.init()
     settings = Settings()
@@ -14,10 +15,8 @@ def run_game():
     clock = pygame.time.Clock()
 
     state_manager = StateMananger(screen)
+    state_manager.go_to('title', 'init')
 
-    #state = GameState(screen)
-    #state.init_asteroids()
-    state = TitleState(screen)
 
     # Запуск основного цикла игры.
     while True:
@@ -25,12 +24,10 @@ def run_game():
         #clock.tick(30)
         clock.tick(60)
 
-        state_manager.scene.handle_events(pygame.event.get())
-        state_manager.scene.update()
-        state_manager.scene.render(screen)
-        #state.handle_events(pygame.event.get())
-        #state.update()
-        state_manager.draw()
+        state_manager.cur_scene.handle_events(pygame.event.get())
+        state_manager.cur_scene.update()
+        state_manager.cur_scene.draw()
+
         #pygame.display.flip()
         # Отслеживание событий клавиатуры и мыши.
 

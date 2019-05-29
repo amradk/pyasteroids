@@ -1,5 +1,6 @@
 import pygame
 
+
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, group, speedx = 0, speedy = 0, x = 0, y = 0, animation_speed = 80 ):
         pygame.sprite.Sprite.__init__(self)
@@ -21,8 +22,11 @@ class GameObject(pygame.sprite.Sprite):
         self.rect.top += self.speedy
         self.rect.centerx += self.speedx
 
-    def set_speed(self, speed):
-        self.speed = speed
+    def set_speed_x(self, speed_x):
+        self.speedx = speed_x
+
+    def set_speed_y(self, speed_y):
+        self.speedy = speed_y
 
     def get_x(self):
         return self.rect.left

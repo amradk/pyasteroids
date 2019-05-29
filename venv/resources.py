@@ -126,3 +126,14 @@ regular_explosion = [
     "assets/objects/explosion/regularExplosion07.png",
     "assets/objects/explosion/regularExplosion08.png",
 ]
+screen_width = 640
+screen_height = 480
+background_image_path = "assets/background/space.png"
+caption = "Space Invasion"
+player_ship = "assets/ships/player.png"
+player_ship_left = "assets/ships/playerLeft.png"
+player_ship_right = "assets/ships/playerRight.png"
+player_shield = "assets/objects/shield/shieldBlue.png"
+player_speed = 3
+enemy_ship = "assets/objects/enemyShip.png"
+player_bullet = "assets/shoots/laserGreen.png"

@@ -3,7 +3,9 @@ from bullet import Bullet
 from gameobject import GameObject
 from gameeffect import GameEffect
 
+
 class Player(GameObject):
+
     def __init__(self, pl_group, ef_group, screen, settings, speedx, speedy, start_x, start_y, animation_speed = 60):
         GameObject.__init__(self, pl_group, speedx, speedy, start_x, start_y, animation_speed)
         """Инициализирует корабль и задает его начальную позицию."""
@@ -52,7 +54,6 @@ class Player(GameObject):
         self.speed = settings.player_speed
         self.center = float(self.rect.centerx)
 
-
     def update(self):
         """Обновляет позицию корабля с учетом флага."""
         if self.moving_right and self.rect.right < self.screen_rect.right:
@@ -85,7 +86,6 @@ class Player(GameObject):
         if self.image != self.image_right:
             self.image = self.image_right
 
-
     def shoot(self):
         self.blast.update_time()
         self.blast.set_x(self.rect.centerx)
@@ -115,3 +115,9 @@ class Player(GameObject):
                 self.shield_hp = 0
         else:
             self.hp -= damage
+
+    def set_hp(self, hp):
+        self.hp = hp
+
+    def set_shield(self, shield):
+        self.shield_hp = shield

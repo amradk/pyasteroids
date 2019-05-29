@@ -39,11 +39,11 @@ class Background():
 
     def update_galaxy(self):
         now = pygame.time.get_ticks()
-        if self.galaxy_released == True:
+        if self.galaxy_released:
             if now - self.galaxy_last_release > self.galaxy_period:
                 self.galaxy.set_y(-100)
                 self.galaxy.set_x(randrange(0, 639))
-                self.galaxy.set_speed(randrange(1, 3))
+                self.galaxy.set_speed_y(randrange(1, 3))
                 self.group.add(self.galaxy)
                 self.galaxy_released = False
                 self.galaxy_last_release = now

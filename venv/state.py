@@ -1,13 +1,18 @@
 import pygame
 
+
 class State(object):
+
     def __init__(self):
         self.done = False
         self.next = None
         self.quit = False
         self.previous = None
 
-    def draw(self, screen):
+    def init(self):
+        raise NotImplementedError
+
+    def draw(self):
         raise NotImplementedError
 
     def update(self):
