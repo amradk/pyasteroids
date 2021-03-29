@@ -15,7 +15,7 @@ mccabe==0.6.1
 mercurial==4.8.1
 pelican==4.0.1
 pssh==2.3.1
-Pygments==2.3.1
+Pygments==2.7.4
 pylint==1.9.4
 python-dateutil==2.7.5
 pytz==2018.9
